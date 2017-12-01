@@ -1,42 +1,30 @@
-## 端口号
-### gd-console-api----8863-------debug: 30005
-### gd-console-service---- 8861
-### gd-id-service----8866
-### gd-anchor-service----8865
-### gd-anchor-api----8867
-### gd-call-back----8869
-### gd-base
-### gd-job-service -- 8888-----30888
-### gd-kafka-service -- 8889
-
-### gd-watch-api----8862-------debug: 30006
-### gd-watch-service----8864---30864
-### gd-wechat-----8870--30870
-### gd-update-----8871--30871
-
-### gd-update-----8872
-
-### gd-console-service-remote---- 8861- 7861-------debug: 8002-30802
-### gd-xxl-job---- 8873
+# 私域直播培训平台
+## 直播功能: 主播推流,智能直播,OBS推流
+## 助理平台: 场控控制,直播间管理,直播间数据统计
+## 用户端: 观看直播,聊天互动,礼物打赏
+## 直播模板: 三分屏(带课件),二分屏,全屏
+## 渠道统计: 渠道推广,渠道统计
+## 训练营: 课程管理,课程推广,课程统计,学员导入
+### 控制台
+![img_6.png](img_6.png)
+![img_7.png](img_7.png)
+![img_8.png](img_8.png)
+![img_9.png](img_9.png)
+![img_10.png](img_10.png)
+![img_11.png](img_11.png)
 
 
 
-### redis 0库--------用户观看缓存数据
+### 助理平台
+![img_5.png](img_5.png)
+### 主播商
 
+![img_12.png](img_12.png)
 
-### redis 1库-------渠道临时数据
+### 渠道页面
+![img_13.png](img_13.png)
+### 渠道根据
+![img_14.png](img_14.png)
 
-
-### redis 2库--------直播间开播，学员禁言拉黑信息存储
-
-
-### redis 3库--------ip库
-
-### redis 4库--------观看端用户登录token
-
-### redis 5库--------job
-
-### redis 6库--------用户优惠券信息记录
-### mongDB logs--------用户观看及消息记录
-
-
+### 全代码 搭建 联系微信
+![img_15.png](img_15.png)
