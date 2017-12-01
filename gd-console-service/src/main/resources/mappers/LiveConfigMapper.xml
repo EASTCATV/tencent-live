@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.LiveConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.live.LiveConfig">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="live_id" property="liveId" />
+        <result column="count_down_enable" property="countDownEnable" />
+        <result column="pc_theme_type" property="pcThemeType" />
+        <result column="mobile_theme_type" property="mobileThemeType" />
+        <result column="share_title" property="shareTitle" />
+        <result column="share_pic_url" property="sharePicUrl" />
+        <result column="guide_page_enable" property="guidePageEnable" />
+        <result column="guide_page_img" property="guidePageImg" />
+        <result column="microphone_enable" property="microphoneEnable" />
+        <result column="replay_enable" property="replayEnable" />
+        <result column="sign_enable" property="signEnable" />
+        <result column="heat_enable" property="heatEnable" />
+        <result column="look_base" property="lookBase" />
+        <result column="online_multiple" property="onlineMultiple" />
+        <result column="gift_giving_enable" property="giftGivingEnable" />
+        <result column="redpack_enable" property="redpackEnable" />
+        <result column="max_online_num" property="maxOnlineNum" />
+        <result column="paster_enable" property="pasterEnable" />
+        <result column="teaser_enable" property="teaserEnable" />
+        <result column="customer_service_enable" property="customerServiceEnable" />
+        <result column="reward_enable" property="rewardEnable" />
+        <result column="reward_quick_enable" property="rewardQuickEnable" />
+        <result column="reward_money" property="rewardMoney" />
+        <result column="video_expired_enable" property="videoExpiredEnable" />
+        <result column="video_expired_time" property="videoExpiredTime" />
+        <result column="invite_enable" property="inviteEnable" />
+        <result column="invite_style" property="inviteStyle" />
+        <result column="show_from" property="showFrom" />
+        <result column="verify_phone" property="verifyPhone" />
+        <result column="commodity_enable" property="commodityEnable" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flg" property="deleteFlg" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, live_id, count_down_enable, pc_theme_type, mobile_theme_type, share_title, share_pic_url, guide_page_enable, guide_page_img,  microphone_enable, replay_enable, sign_enable, heat_enable, look_base, online_multiple, gift_giving_enable, redpack_enable, max_online_num, paster_enable, teaser_enable, customer_service_enable, reward_enable, reward_quick_enable, reward_money, video_expired_enable, video_expired_time, invite_enable, invite_style, show_from, verify_phone, commodity_enable, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+
+</mapper>

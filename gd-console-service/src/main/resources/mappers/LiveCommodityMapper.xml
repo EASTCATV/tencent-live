@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.LiveCommodityMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.live.LiveCommodity">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="live_id" property="liveId"/>
+        <result column="commodity_id" property="commodityId"/>
+        <result column="order_number" property="orderNumber"/>
+        <result column="put_status" property="putStatus"/>
+        <result column="recommend_status" property="recommendStatus"/>
+        <result column="sell_out" property="sellOut"/>
+        <result column="count_down_end_time" property="countDownEndTime"/>
+        <result column="style_type" property="styleType"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flag" property="deleteFlag"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, live_id, commodity_id,order_number, put_status,sell_out, recommend_status, count_down_end_time,style_type, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+
+
+
+    <resultMap id="getLivingRoomVo" type="cn.godsdo.vo.live.getLiveCommodityVo">
+        <id column="commodity_id" property="commodityId"/>
+        <id column="order_number" property="orderNumber"/>
+        <id column="put_status" property="putStatus"/>
+        <id column="recommend_status" property="recommendStatus"/>
+        <id column="sell_out" property="sellOut"/>
+        <id column="commodity" property="commodityName"/>
+        <id column="commodity_price" property="commodityPrice"/>
+        <id column="commodity_lineation_price" property="commodityLineationPrice"/>
+        <id column="image" property="image"/>
+        <id column="pay_type" property="payType"/>
+        <id column="other_id" property="otherId"/>
+        <id column="jump_address" property="jumpAddress"/>
+    </resultMap>
+
+    <select id="getRoomCommodityList" resultMap="getLivingRoomVo">
+        SELECT
+            lrd.commodity_id,lrd.order_number,lrd.put_status,lrd.recommend_status,lrd.sell_out,cd.group_id,
+            cd.commodity,cd.commodity_price,cd.commodity_lineation_price,cd.image,cd.pay_type,cd.jump_address,cd.other_id
+        FROM
+            live_commodity lrd
+                LEFT JOIN com_commodity cd ON cd.id = lrd.commodity_id
+                AND cd.com_id = lrd.com_id
+        WHERE
+            lrd.com_id = #{comId} AND lrd.live_id = #{liveId} AND lrd.delete_flag = FALSE
+    </select>
+</mapper>

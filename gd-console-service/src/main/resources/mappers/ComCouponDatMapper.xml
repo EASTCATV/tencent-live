@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.coupon.ComCouponDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.coupon.ComCouponDat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="name" property="name" />
+        <result column="coupon_type" property="couponType" />
+        <result column="coupon_value" property="couponValue" />
+        <result column="relation_commodity" property="relationCommodity" />
+        <result column="allow_multiple" property="allowMultiple" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, name, coupon_type, coupon_value, relation_commodity, allow_multiple, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+
+    <resultMap id="getAllCouponMap" type="cn.godsdo.vo.coupon.GetAllCouponVo">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="name" property="name" />
+        <result column="coupon_type" property="couponType" />
+        <result column="coupon_value" property="couponValue" />
+        <result column="relation_commodity" property="relationCommodity" />
+        <result column="allow_multiple" property="allowMultiple" />
+        <collection column="id" property="sum" select="getUseSum"/>
+    </resultMap>
+    <!-- 获取优惠券使用总数 -->
+    <select id="getUseSum" resultType="Integer">
+        SELECT IFNULL(sum(1), 0) FROM pay_order WHERE order_type = 2 AND status = 1 AND coupon_id = #{id}
+    </select>
+    <select id="getAllCoupon" resultMap="getAllCouponMap">
+        SELECT ccd.*
+        FROM com_coupon_dat ccd
+        <where>
+            ccd.com_id = #{comId}
+            <if test="dto.couponName != null and dto.couponName!= ''">
+                and ccd.name LIKE concat('%',#{dto.couponName},'%')
+            </if>
+            <if test="dto.couponType != null and dto.couponType != -1">
+                and ccd.coupon_type = #{dto.couponType}
+            </if>
+            AND ccd.delete_flag = FALSE
+        </where>
+    </select>
+</mapper>

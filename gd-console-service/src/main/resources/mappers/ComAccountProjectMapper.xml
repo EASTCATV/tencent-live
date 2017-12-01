@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.ComAccountProjectMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComAccountProject">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="title" property="title" />
+        <result column="parent_id" property="parentId" />
+        <result column="order_number" property="orderNumber" />
+        <result column="type" property="type" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flg" property="deleteFlg" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, title, parent_id, order_number,type, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.channel.ChannelRankingStatisticsMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.channel.ChannelRankingStatistics">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="live_id" property="liveId"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="speak_sum" property="speakSum"/>
+        <result column="average_duration" property="averageDuration"/>
+        <result column="total" property="total"/>
+        <result column="new_total" property="newTotal"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, live_id, channel_id,speak_sum, average_duration, total, new_total, create_at
+    </sql>
+
+    <resultMap id="getComChannelRankingDataMap" type="cn.godsdo.vo.channel.GetComChannelRankingDataVo">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="live_id" property="liveId"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="name" property="channelName"/>
+        <result column="average_duration" property="averageDuration"/>
+        <result column="total" property="total"/>
+        <result column="new_total" property="newTotal"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+    <select id="getComChannelRankingData" resultMap="getComChannelRankingDataMap"
+            parameterType="cn.godsdo.dto.GetComChannelRankingChartDto">
+        SELECT crs.*, ccd.name
+        FROM channel_ranking_statistics crs
+                 LEFT JOIN com_channel_dat ccd ON ccd.id = crs.channel_id
+        WHERE crs.statistics_date = #{params.date}
+          AND crs.live_id = #{params.liveId}
+          AND crs.com_id = #{comId}
+    </select>
+</mapper>

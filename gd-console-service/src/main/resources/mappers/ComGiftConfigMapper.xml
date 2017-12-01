@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.ComGiftConfigMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComGiftConfig">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="gift_name" property="giftName"/>
+        <result column="gift_price" property="giftPrice"/>
+        <result column="gift_pic_url" property="giftPicUrl"/>
+        <result column="gift_type" property="giftType"/>
+        <result column="gift_index" property="giftIndex"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flg" property="deleteFlg"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, gift_name, gift_price, gift_pic_url, gift_type,gift_index, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+</mapper>

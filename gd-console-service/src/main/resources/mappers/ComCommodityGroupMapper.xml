@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.ComCommodityGroupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComCommodityGroup">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="group_name" property="groupName" />
+        <result column="delete_flag" property="deleteFlag" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, group_name, delete_flag, update_at, update_by, create_at, create_by
+    </sql>
+
+    <resultMap id="GetAllGroupMap" type="cn.godsdo.vo.GetAllGroupVo">
+        <id column="id" property="id" />
+        <result column="group_name" property="groupName" />
+        <result column="create_at" property="createAt" />
+        <collection column="id" property="commoditySum" select="getCommoditySum"/>
+    </resultMap>
+
+    <select id="getCommoditySum" resultType="string">
+        SELECT count(1) as commoditySum  FROM com_commodity
+        WHERE group_id = #{id} AND delete_flag = FALSE
+    </select>
+
+    <select id="getAllGroup" resultMap="GetAllGroupMap">
+        SELECT
+        id,
+        group_name,
+        create_at
+        FROM
+        com_commodity_group
+        <where>
+            com_id=#{comId}
+<!--            <if test="params.groupName!=null and params.groupName != ''">-->
+<!--                and group_name LIKE concat('%',#{params.groupName},'%')-->
+<!--            </if>-->
+            and delete_flag=false
+        </where>
+        order by create_at desc
+    </select>
+
+</mapper>

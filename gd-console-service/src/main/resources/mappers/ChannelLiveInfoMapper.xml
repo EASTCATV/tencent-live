@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.channel.ChannelLiveInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.channel.ChannelLiveInfo">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="channel_id" property="channelId" />
+        <result column="live_id" property="liveId" />
+        <result column="short_url" property="shortUrl" />
+        <result column="status" property="status" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, channel_id, live_id,short_url,status, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+
+    <select id="getBindChannelByLiveGroup" resultType="Long">
+        SELECT DISTINCT cli.channel_id FROM channel_live_info cli LEFT JOIN com_channel_dat ccd  ON ccd.id=cli.channel_id
+        <where>
+            cli.live_id = #{liveId}  AND cli.com_id =#{comId} AND cli.delete_flag =false
+            <if test="groupId != null and groupId != 0">
+                AND ccd.group_id =#{groupId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getBindChannelByLiveGroupList" resultType="Long">
+        SELECT DISTINCT cli.channel_id FROM channel_live_info cli LEFT JOIN com_channel_dat ccd  ON ccd.id=cli.channel_id
+        <where>
+            cli.live_id = #{liveId}  AND cli.com_id =#{comId} AND cli.delete_flag =false
+            <if test="ids != null and ids.size>0">
+                AND ccd.group_id in (
+                <foreach collection="ids" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getNotBindChannelByLiveGroupList" resultType="Long">
+        SELECT DISTINCT ccd.id FROM com_channel_dat ccd
+        <where>
+            ccd.com_id =#{comId} AND ccd.delete_flag =false
+            AND ccd.id  NOT IN (SELECT channel_id FROM channel_live_info WHERE live_id = #{liveId}  AND com_id =#{comId})
+            <if test="ids != null and ids.size>0">
+                AND ccd.group_id in (
+                <foreach collection="ids" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+    </select>
+</mapper>

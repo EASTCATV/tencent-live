@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.LiveCountDownMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.live.LiveCountDown">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="live_id" property="liveId" />
+        <result column="countDown" property="countDown" />
+        <result column="title" property="title" />
+        <result column="commodity_enable" property="commodityEnable" />
+        <result column="sell_out" property="sellOut" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, live_id, countDown, title,  commodity_enable, sell_out, update_at, update_by, create_at, create_by
+    </sql>
+
+</mapper>

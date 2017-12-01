@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>cn.gods.do</groupId>
+    <artifactId>gd-console-api</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>cn.gods.do</groupId>
+        <artifactId>dependencies-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../dependencies-parent/pom.xml</relativePath>
+    </parent>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mainClass>cn.godsdo.ConsoleController</mainClass>
+    </properties>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profiles.active>dev</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>127.0.0.1:8848</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+                <nacosNameSpace>public</nacosNameSpace>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev-remote</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>119.45.214.159:8848</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev-remote-li</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>172.17.16.10:8848</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+            </properties>
+        </profile>
+        <profile>
+            <id>dev-remote-dk</id>
+            <properties>
+                <profiles.active>dev-remote-dk</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>172.17.16.10:48848</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker_dev</id>
+            <properties>
+                <profiles.active>docker_dev</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>172.17.16.10:38848</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+            </properties>
+        </profile>
+        <profile>
+            <id>docker_prod</id>
+            <properties>
+                <profiles.active>docker_prod</profiles.active>
+                <profiles.group>devs</profiles.group>
+                <nacos.config.server-addr>${docker.prod.nacos}</nacos.config.server-addr>
+                <graylogHost>172.17.16.10</graylogHost>
+            </properties>
+        </profile>
+    </profiles>
+    <dependencies>
+        <dependency>
+            <groupId>cn.gods.do</groupId>
+            <artifactId>gd-base</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <!--基础框架包-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>vod_api</artifactId>
+            <version>2.1.5</version>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+<!--            <version>1.2.73</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <classifier>jakarta</classifier>
+            <version>${shiro.version}</version>
+            <!-- 排除仍使用了javax.servlet的依赖 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 引入适配jakarta的依赖包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <classifier>jakarta</classifier>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <classifier>jakarta</classifier>
+            <!--            <version>1.13.0</version>-->
+            <version>${shiro.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!--jwt-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.12.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
+            <!--            <version>3.3.1</version>-->
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <!--GrayLog日志-->
+        <dependency>
+            <groupId>de.siegmar</groupId>
+            <artifactId>logback-gelf</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
+        </dependency>
+
+
+
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.13.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- 接口注解,spingboot aop切面 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi-ooxml</artifactId>-->
+<!--            <version>3.17</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>easyexcel</artifactId>-->
+<!--            <version>${easyexcel.version}</version>-->
+<!--        </dependency>-->
+
+
+        <dependency>
+            <groupId>cloud.tianai.captcha</groupId>
+            <artifactId>tianai-captcha-springboot-starter</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
+
+    </dependencies>
+    <build>
+        <finalName>gd-console-api</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--需要加这个，不然打包镜像找不到启动文件-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <addResources>true</addResources>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+                <configuration>
+
+                    <repository>${docker.image.prefix}/${project.build.finalName}</repository>
+
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+</project>

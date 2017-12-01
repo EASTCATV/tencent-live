@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.VideoShareRecordMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.VideoShareRecord">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="video_name" property="videoName" />
+        <result column="video_id" property="videoId" />
+        <result column="file_id" property="fileId" />
+        <result column="token" property="token" />
+        <result column="video_type" property="videoType" />
+        <result column="mobile_theme_type" property="mobileThemeType" />
+        <result column="type" property="type" />
+        <result column="share_day" property="shareDay" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, video_name, video_id, file_id,mobile_theme_type, token, video_type,type,share_day, create_at, create_by, delete_flag
+    </sql>
+
+</mapper>

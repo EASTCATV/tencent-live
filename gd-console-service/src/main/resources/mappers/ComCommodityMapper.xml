@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.ComCommodityMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComCommodity">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="commodity" property="commodity"/>
+        <result column="group_id" property="groupId"/>
+        <result column="other_id" property="otherId"/>
+        <result column="commodity_price" property="commodityPrice"/>
+        <result column="commodity_lineation_price" property="commodityLineationPrice"/>
+        <result column="image" property="image"/>
+        <result column="pay_type" property="payType"/>
+        <result column="jump_address" property="jumpAddress"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, commodity, group_id,other_id, commodity_price, commodity_lineation_price, image, pay_type, jump_address, delete_flag, update_at, update_by, create_at, create_by
+    </sql>
+
+
+    <select id="getListByRoomBind" resultMap="BaseResultMap">
+        SELECT cc.*
+        FROM com_commodity cc
+        LEFT JOIN com_commodity_group ccg ON cc.com_id = ccg.com_id
+        AND cc.group_id = ccg.id
+        <where>
+            cc.com_id = #{comId}
+            AND cc.id NOT IN
+            (SELECT lrc.commodity_id FROM live_commodity lrc WHERE lrc.live_id = #{dto.liveId} AND lrc.delete_flag =
+            FALSE)
+            <if test="dto.commodity != null and dto.commodity!= ''">
+                and cc.commodity LIKE concat('%',#{dto.commodity},'%')
+            </if>
+            <if test="dto.groupId != null">
+                and cc.group_id = #{dto.groupId}
+            </if>
+            AND cc.delete_flag = FALSE
+        </where>
+    </select>
+    <select id="getListByCouponBind" resultMap="BaseResultMap">
+        SELECT cc.*
+        FROM com_commodity cc
+        LEFT JOIN com_commodity_group ccg ON cc.com_id = ccg.com_id
+        AND cc.group_id = ccg.id
+        <where>
+            cc.com_id = #{comId}
+            <if test="dto.ids != null and dto.ids.size>0">
+                AND cc.id NOT IN
+                ( <foreach collection="dto.ids" item="item" separator=",">
+                    #{item}
+                </foreach>)
+            </if>
+
+            <!--            (SELECT cccd.commodity_id FROM com_coupon_commodity_dat cccd WHERE cccd.coupon_id = #{dto.couponId} AND cccd.delete_flag = FALSE)-->
+            <if test="dto.commodity != null and dto.commodity!= ''">
+                and cc.commodity LIKE concat('%',#{dto.commodity},'%')
+            </if>
+            <if test="dto.groupId != null">
+                and cc.group_id = #{dto.groupId}
+            </if>
+            AND cc.delete_flag = FALSE
+        </where>
+    </select>
+    <resultMap id="GetAllListMap" type="cn.godsdo.vo.GetCommodityListVo">
+        <id column="id" property="id"/>
+        <id column="commodity" property="commodity"/>
+        <id column="image" property="image"/>
+        <id column="commodity_price" property="commodityPrice"/>
+        <id column="commodity_lineation_price" property="commodityLineationPrice"/>
+        <!--        <id column="group_name" property="commodityGroup"/>-->
+        <id column="group_id" property="groupId"/>
+        <id column="other_id" property="otherId"/>
+        <id column="pay_type" property="payType"/>
+        <id column="jump_address" property="jumpAddress"/>
+        <id column="create_at" property="createAt"/>
+        <collection column="id" property="bindingRoom" select="getBindingRoom"/>
+    </resultMap>
+
+    <select id="getBindingRoom" resultType="Integer">
+        <!--        select sum(1) from live_commodity WHERE commodity_id = #{id} AND delete_flag = false-->
+        select sum(1) from live_commodity lrc LEFT JOIN live_dat ld ON ld.id = lrc.live_id WHERE
+        lrc.commodity_id = #{id} AND lrc.delete_flag = false AND ld.delete_flg = FALSE
+    </select>
+    <select id="getAllList" resultMap="GetAllListMap">
+        SELECT id,
+               commodity,
+               image,
+               other_id,
+               group_id,
+               commodity_price,
+               commodity_price,
+               commodity_lineation_price,
+               pay_type,
+               jump_address,
+               create_at
+        FROM com_commodity
+        <where>
+         com_id = #{comId}
+          and delete_flag = false
+        <if test="dto.groupId != null and dto.groupId!= ''">
+            and     group_id = #{dto.groupId}
+        </if>
+        </where>
+        order by create_at desc
+    </select>
+</mapper>

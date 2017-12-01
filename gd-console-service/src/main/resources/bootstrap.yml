@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: gd-console-service
+  main:
+    allow-circular-references: true
+  cloud:
+    nacos:
+      config:
+        server-addr: '@nacos.config.server-addr@'
+        file-extension: yaml
+        refresh-enabled: true
+        group: '@profiles.group@'
+        ext-config[0]:
+          data-id: gd-console-service-default.yaml
+          group: '@profiles.group@'
+          refresh: true
+#          type: yaml
+graylog:
+  ip: '@graylogHost@'
+
+static:
+  databaseUrl: D:\work\GeoLite2-City.mmdb
+#  databaseUrl: F:/java/ynWord/jeecg-boot/static/ipDataBase/GeoLite2-City.mmdb

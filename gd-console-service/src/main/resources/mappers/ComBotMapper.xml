@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.ComBotMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComBot">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="nickname" property="nickname" />
+        <result column="head_url" property="headUrl" />
+        <result column="bot_type" property="botType" />
+<!--        <result column="group_id" property="groupId" />-->
+        <result column="sequence" property="sequence" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, nickname, head_url, bot_type, sequence, update_at, update_by, create_at, create_by
+    </sql>
+
+
+    <select id="getBotListByAssistan" resultMap="BaseResultMap">
+        SELECT * FROM com_bot
+        <where>
+            com_id=#{comId}
+            <if test="name != null and name != ''">
+                and nickname LIKE concat('%',#{name},'%')
+            </if>
+           AND id NOT IN (SELECT bot_id FROM live_bot WHERE com_id = #{comId} AND live_id = #{liveId} )
+        </where>
+        order by create_at desc
+    </select>
+</mapper>

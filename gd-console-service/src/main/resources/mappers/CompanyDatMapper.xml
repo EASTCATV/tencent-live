@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.CompanyDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.CompanyDat">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="company" property="company" />
+        <result column="contact" property="contact" />
+        <result column="industry" property="industry" />
+        <result column="region" property="region" />
+        <result column="remark" property="remark" />
+        <result column="tax_company" property="taxCompany" />
+        <result column="tax_no" property="taxNo" />
+        <result column="tax_bank" property="taxBank" />
+        <result column="tax_bank_no" property="taxBankNo" />
+        <result column="tax_address" property="taxAddress" />
+        <result column="tax_phone" property="taxPhone" />
+        <result column="tax_type" property="taxType" />
+        <result column="com_type" property="comType" />
+        <result column="express_person" property="expressPerson" />
+        <result column="express_phone" property="expressPhone" />
+        <result column="express_address" property="expressAddress" />
+        <result column="sale_status" property="saleStatus" />
+        <result column="sub_domain" property="subDomain" />
+        <result column="sale_id" property="saleId" />
+        <result column="clue_flg" property="clueFlg" />
+        <result column="level" property="level" />
+        <result column="last_login" property="lastLogin" />
+        <result column="last_track" property="lastTrack" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flg" property="deleteFlg" />
+        <result column="account_balance" property="accountBalance" />
+        <result column="channel_id" property="channelId" />
+        <result column="account_id" property="accountId" />
+        <result column="open_at" property="openAt" />
+        <result column="sub_login_flag" property="subLoginFlag" />
+        <result column="authority_status" property="authorityStatus" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, company, contact, industry, region, remark, tax_company, tax_no, tax_bank, tax_bank_no, tax_address, tax_phone, tax_type, com_type, express_person, express_phone, express_address, sale_status, sub_domain, sale_id, clue_flg, level, last_login, last_track, update_at, update_by, create_at, create_by, delete_flg, account_balance, channel_id, account_id, open_at, sub_login_flag, authority_status, status
+    </sql>
+
+</mapper>

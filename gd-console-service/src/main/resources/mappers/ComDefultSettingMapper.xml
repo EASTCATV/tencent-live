@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.ComDefultSettingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComDefultSetting">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="h5_delayed" property="h5Delayed" />
+        <result column="pc_delayed" property="pcDelayed" />
+        <result column="max_online_num" property="maxOnlineNum" />
+        <result column="bot_status" property="botStatus" />
+        <result column="intelligent_status" property="intelligentStatus" />
+        <result column="wx_jsapi_appid" property="wxJsapiAppid" />
+        <result column="wx_jsapi_secret" property="wxJsapiSecret" />
+        <result column="wx_min_app_id" property="wxMinAppId" />
+        <result column="wx_min_app_secret" property="wxMinAppSecret" />
+        <result column="wx_mch_id" property="wxMchId" />
+        <result column="wx_mch_key" property="wxMchKey" />
+        <result column="wx_mch_certificate" property="wxMchCertificate" />
+        <result column="mp_authorizer_refresh_token" property="mpAuthorizerRefreshToken" />
+        <result column="min_authorizer_refresh_token" property="minAuthorizerRefreshToken" />
+        <result column="mp_auth_status" property="mpAuthStatus" />
+        <result column="min_auth_status" property="minAuthStatus" />
+        <result column="mp_qrcode" property="mpQrcode" />
+        <result column="cdn_num" property="cdnNum" />
+        <result column="transcoding_enable" property="transcodingEnable" />
+        <result column="transcoding_h" property="transcodingH" />
+        <result column="transcoding_m" property="transcodingM" />
+        <result column="transcoding_l" property="transcodingL" />
+        <result column="push_cdn_id" property="pushCdnId" />
+        <result column="push_domain" property="pushDomain" />
+        <result column="rtmp_pull_domain" property="rtmpPullDomain" />
+        <result column="flv_pull_domain" property="flvPullDomain" />
+        <result column="m3u8_pull_domain" property="m3u8PullDomain" />
+        <result column="access_secret" property="accessSecret" />
+        <result column="open_private_video_rec" property="openPrivateVideoRec" />
+        <result column="template_id" property="templateId" />
+        <result column="bind_id" property="bindId" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, h5_delayed, pc_delayed, max_online_num,bot_status,intelligent_status, wx_jsapi_appid, wx_jsapi_secret, wx_min_app_id, wx_min_app_secret, wx_mch_id, wx_mch_key, wx_mch_certificate, mp_authorizer_refresh_token, min_authorizer_refresh_token, mp_auth_status, min_auth_status, mp_qrcode, cdn_num, transcoding_enable, transcoding_h, transcoding_m, transcoding_l, push_cdn_id, push_domain, rtmp_pull_domain, flv_pull_domain, m3u8_pull_domain, access_secret, open_private_video_rec,template_id,bind_id, update_at, update_by, create_at, create_by
+    </sql>
+
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.ComFileInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComFileInfo">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="filename" property="filename" />
+        <result column="identifier" property="identifier" />
+        <result column="type" property="type" />
+        <result column="total_size" property="totalSize" />
+        <result column="location" property="location" />
+        <result column="del_flag" property="delFlag" />
+        <result column="ref_project_id" property="refProjectId" />
+        <result column="upload_by" property="uploadBy" />
+        <result column="upload_time" property="uploadTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, filename, identifier, type, total_size, location, del_flag, ref_project_id, upload_by, upload_time
+    </sql>
+
+</mapper>

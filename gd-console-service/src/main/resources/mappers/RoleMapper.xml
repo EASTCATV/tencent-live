@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.RoleMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.Role">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_type" property="roleType"/>
+        <result column="role_comment" property="roleComment"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flg" property="deleteFlg"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, role_name, role_type, role_comment, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+    <resultMap id="getRoleListResultMap" type="cn.godsdo.vo.GetRoleListVo">
+        <id column="id" property="id"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_type" property="roleType"/>
+        <result column="role_comment" property="roleComment"/>
+        <result column="bindEmployeeCount" property="bindEmployeeCount"/>
+    </resultMap>
+    <select id="getRoleList" resultMap="getRoleListResultMap">
+        SELECT sr.id,
+               sr.role_name,
+               sr.`role_type`,
+               sr.`role_comment`,
+               COUNT(ad.role_id) bindEmployeeCount
+        FROM sys_role sr
+                 LEFT JOIN account_dat ad
+                           ON sr.id = ad.role_id AND ad.`delete_flg` = FALSE
+        WHERE sr.id !='1' AND sr.`com_id` = #{id}
+          AND sr.`delete_flg` = FALSE
+        GROUP BY sr.id
+    </select>
+</mapper>

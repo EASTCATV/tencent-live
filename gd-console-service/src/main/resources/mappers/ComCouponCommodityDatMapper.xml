@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.coupon.ComCouponCommodityDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.coupon.ComCouponCommodityDat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="coupon_id" property="couponId" />
+        <result column="commodity_id" property="commodityId" />
+        <result column="commodity_price" property="commodityPrice" />
+        <result column="discount_price" property="discountPrice" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, coupon_id, commodity_id,commodity_price,discount_price, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+
+</mapper>

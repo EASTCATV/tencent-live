@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.ComWatchChatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComWatchChat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="free_word" property="freeWord" />
+        <result column="sensitive_on" property="sensitiveOn" />
+        <result column="sensitive_word" property="sensitiveWord" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, free_word, sensitive_on, sensitive_word, update_at, update_by, create_at, create_by
+    </sql>
+
+</mapper>

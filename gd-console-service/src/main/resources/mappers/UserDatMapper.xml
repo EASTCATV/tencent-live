@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.user.UserDatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.user.UserDat">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="name" property="name"/>
+        <result column="identity_no" property="identityNo"/>
+        <result column="head_image" property="headImage"/>
+        <result column="phone" property="phone"/>
+        <result column="login" property="login"/>
+        <result column="region" property="region"/>
+        <result column="password" property="password"/>
+        <result column="ip" property="ip"/>
+        <result column="wx_openid" property="wxOpenid"/>
+        <result column="unionid" property="unionid"/>
+        <result column="birthday" property="birthday"/>
+        <result column="occupation" property="occupation"/>
+        <result column="comment" property="comment"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="registration_type" property="registrationType"/>
+        <result column="last_track_time" property="lastTrackTime"/>
+        <result column="block" property="block"/>
+        <result column="end_login_at" property="endLoginAt"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flag" property="deleteFlag"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, name, identity_no, head_image, phone, login, region, password,ip, wx_openid, unionid, birthday, occupation, comment, channel_id, registration_type, last_track_time, block, end_login_at, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+    <resultMap id="GetUserListMap" type="cn.godsdo.vo.user.GetUserListvo">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="name" property="name"/>
+        <result column="head_image" property="headImage"/>
+        <result column="phone" property="phone"/>
+        <result column="ip" property="ip"/>
+        <result column="region" property="region"/>
+        <result column="channelName" property="channelName"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="create_at" property="createAt"/>
+        <collection column="{id = channel_id}" property="channelName" select="getChannelName"/>
+    </resultMap>
+    <select id="getChannelName" resultType="string">
+        SELECT name
+        FROM com_channel_dat
+        where id = #{id}
+    </select>
+    <select id="getUserList" resultMap="GetUserListMap"
+            parameterType="cn.godsdo.dto.user.GetUserListDto">
+        SELECT ud.id,ud.com_id,ud.name,ud.head_image,ud.phone,ud.ip,ud.region,ud.channel_id,ud.update_at,ud.create_at,ccd.name channelName
+        FROM user_dat ud LEFT JOIN com_channel_dat ccd ON ccd.id = ud.channel_id
+        <where>
+            ud.com_id=#{id}
+            and ud.delete_flag=false
+            and ud.block=0
+            <if test="params.nameOrId != null and params.nameOrId != ''">
+                and (ud.name LIKE concat('%',#{params.nameOrId},'%')
+                or ud.id LIKE concat('%',#{params.nameOrId},'%')
+                )
+            </if>
+            <if test="params.startTime != null and params.startTime != ''">
+                and ud.create_at >= #{params.startTime} and ud.create_at &lt;= #{params.endTime}
+            </if>
+        </where>
+        order by ud.create_at desc
+    </select>
+    <resultMap id="GetBlockUserListMap" type="cn.godsdo.vo.user.GetUserListvo">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="name" property="name"/>
+        <result column="head_image" property="headImage"/>
+        <result column="phone" property="phone"/>
+        <result column="ip" property="ip"/>
+        <result column="region" property="region"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="create_at" property="createAt"/>
+    </resultMap>
+    <select id="getBlockUserList" resultMap="GetBlockUserListMap"
+            parameterType="cn.godsdo.dto.user.GetUserListDto">
+        SELECT id,com_id,name,head_image,phone,ip,region,update_at,create_at
+        FROM user_dat
+        <where>
+            com_id=#{id}
+            and delete_flag=false
+            and block=1
+            <if test="params.nameOrId != null and params.nameOrId != ''">
+                and (name LIKE concat('%',#{params.nameOrId},'%')
+                or id LIKE concat('%',#{params.nameOrId},'%')
+                )
+            </if>
+            <if test="params.startTime != null and params.startTime != ''">
+                and create_at >= #{params.startTime} and create_at &lt;= #{params.endTime}
+            </if>
+        </where>
+        order by create_at desc
+    </select>
+</mapper>

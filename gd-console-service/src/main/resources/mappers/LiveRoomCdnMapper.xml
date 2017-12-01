@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.LiveRoomCdnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.live.LiveRoomCdn">
+        <id column="cdn_id" property="cdnId" />
+        <result column="name" property="name" />
+        <result column="cdn_secret_key" property="cdnSecretKey" />
+        <result column="m3u8_suffix" property="m3u8Suffix" />
+        <result column="cdn_name" property="cdnName" />
+        <result column="def_push_domain" property="defPushDomain" />
+        <result column="def_rtmp_pull_domain" property="defRtmpPullDomain" />
+        <result column="def_flv_pull_domain" property="defFlvPullDomain" />
+        <result column="def_m3u8_pull_domain" property="defM3u8PullDomain" />
+        <result column="def_channel_id_list" property="defChannelIdList" />
+        <result column="transcoding_prefix" property="transcodingPrefix" />
+        <result column="transcoding_suffix" property="transcodingSuffix" />
+        <result column="push_safety_url_coder" property="pushSafetyUrlCoder" />
+        <result column="pull_safety_url_coder" property="pullSafetyUrlCoder" />
+        <result column="m3u8_transcoding_coder" property="m3u8TranscodingCoder" />
+        <result column="query_cdn_flow_coder" property="queryCdnFlowCoder" />
+        <result column="query_cdn_bandwidth_coder" property="queryCdnBandwidthCoder" />
+        <result column="cdn_close_stream_coder" property="cdnCloseStreamCoder" />
+        <result column="pull_domain_is_same" property="pullDomainIsSame" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        cdn_id, name, cdn_secret_key, m3u8_suffix, cdn_name, def_push_domain, def_rtmp_pull_domain, def_flv_pull_domain, def_m3u8_pull_domain, def_channel_id_list, transcoding_prefix, transcoding_suffix, push_safety_url_coder, pull_safety_url_coder, m3u8_transcoding_coder, query_cdn_flow_coder, query_cdn_bandwidth_coder, cdn_close_stream_coder, pull_domain_is_same
+    </sql>
+
+</mapper>

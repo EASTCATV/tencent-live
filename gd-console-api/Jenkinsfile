@@ -1,0 +1,46 @@
+pipeline {
+    // 在任何代理节点运行
+    agent any
+
+    tools {
+        // maven3.6.0 要在 jenkins全局工具配置中提前配置好
+        maven 'maven3.8.2'
+    }
+
+    stages {
+        stage('构建') {
+            steps {
+                // 从Gitee仓库获取代码
+                git 'https://gitee.com/lakernote/easy-admin.git'
+
+                // 运行Maven
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+            post {
+                // 如果Maven能够运行测试，即使有一些测试失败，也记录测试结果并归档jar文件。
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                    // 会把target/*.jar文件归档到Jenkins的工作目录中的 archive 目录下
+                    archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+
+        stage('部署') {
+            steps {
+                // TODO: 在这里添加部署步骤，将构建生成的文件部署到服务器或其他目标。
+                // 示例：可以使用SCP、SSH或其他部署工具
+                sh "echo 'Add your deployment steps here'"
+            }
+        }
+    }
+
+    post {
+        // 构建后的操作
+        always {
+            // TODO: 在这里添加任何构建后操作，例如清理、通知等。
+            sh "echo 'Add your post-build steps here'"
+        }
+    }
+}

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.channel.ComChannelDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.channel.ComChannelDat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="group_id" property="groupId" />
+        <result column="channel_no" property="channelNo" />
+        <result column="name" property="name" />
+        <result column="account_id" property="accountId" />
+        <result column="status" property="status" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, group_id, channel_no, name, account_id, status, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+    <resultMap id="GetChannelListMap" type="cn.godsdo.vo.channel.GetChannelListVo">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="group_id" property="groupId" />
+        <result column="channel_no" property="channelNo" />
+        <result column="channelName" property="channelName" />
+        <result column="accountName" property="accountName" />
+        <result column="account_id" property="accountId" />
+        <result column="status" property="status" />
+        <result column="login" property="login" />
+
+    </resultMap>
+
+    <select id="getChannelList" resultMap="GetChannelListMap"
+            parameterType="cn.godsdo.dto.channel.GetChannelListDto">
+        SELECT
+        ccd.id,
+        ccd.channel_no,
+        ccd.name channelName,
+        ccd.group_id,
+        ccd.account_id,
+        ad.`name` accountName,
+        ad.login login
+        FROM
+        com_channel_dat ccd
+        LEFT JOIN account_dat ad ON ad.com_id = ccd.com_id  AND ad.id = ccd.account_id
+        <where>
+            ccd.com_id=#{comId}
+<!--            and ccd.group_id=#{params.groupId}-->
+            and ccd.delete_flag = false
+            <if test="params.name != null and params.name != ''">
+                and ccd.name LIKE concat('%',#{params.name},'%')
+            </if>
+<!--                and ccd.group_id = #{params.groupId}-->
+            and ccd.account_id=#{accountId}
+            <if test="params.channelGroupIds!=null and params.channelGroupIds.size>0">
+                and ccd.group_id in (
+                <foreach collection="params.channelGroupIds" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by ccd.create_at desc
+    </select>
+    <select id="getChannelListByAdmin" resultMap="GetChannelListMap"
+            parameterType="cn.godsdo.dto.channel.GetChannelListDto">
+        SELECT
+        ccd.id,
+        ccd.channel_no,
+        ccd.name channelName,
+        ccd.group_id,
+        ccd.account_id,
+        ad.`name` accountName,
+        ad.login login
+        FROM
+        com_channel_dat ccd
+        LEFT JOIN account_dat ad ON ad.com_id = ccd.com_id  AND ad.id = ccd.account_id
+        <where>
+            ccd.com_id=#{comId}
+            <!--            and ccd.group_id=#{params.groupId}-->
+            and ccd.delete_flag = false
+            <if test="params.name != null and params.name != ''">
+                and ccd.name LIKE concat('%',#{params.name},'%')
+            </if>
+            <if test="params.channelGroupIds!=null and params.channelGroupIds.size>0">
+                and ccd.group_id in (
+                <foreach collection="params.channelGroupIds" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by ccd.create_at desc
+    </select>
+    <resultMap id="getAccountChannelListMap" type="cn.godsdo.vo.channel.GetAccountChannelListVo">
+        <id column="id" property="id" />
+        <result column="channelId" property="channelId" />
+        <result column="showId" property="showId" />
+        <result column="liveId" property="liveId" />
+        <result column="roomName" property="roomName" />
+        <result column="live_type" property="liveType" />
+
+    </resultMap>
+
+    <select id="getAccountChannelList" resultMap="getAccountChannelListMap"
+            parameterType="cn.godsdo.dto.channel.GetAccountChannelListDto">
+        SELECT cci.id,ccd.id channelId,ld.id liveId,ld.show_id showId,ld.name roomName ,ld.live_type
+        FROM channel_live_info cci
+        LEFT JOIN com_channel_dat ccd ON ccd.id = cci.channel_id
+        AND ccd.com_id = cci.com_id
+        LEFT JOIN live_dat ld ON ld.id = cci.live_id
+        AND ld.com_id = cci.com_id
+
+        <where>
+            ccd.com_id = #{comId} AND ccd.account_id = #{accountId}
+<!--            and ccd.group_id=#{params.groupId}-->
+            and ccd.delete_flag = false
+            and cci.delete_flag = false
+            <if test="params.channelId != null and params.channelId != 0">
+                and ccd.id LIKE #{params.channelId}
+            </if>
+            <if test="params.liveType != null and params.liveType != 0">
+                and ld.live_type = #{params.liveType}
+            </if>
+        </where>
+        order by cci.create_at DESC
+    </select>
+</mapper>

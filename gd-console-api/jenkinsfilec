@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('列出目录并清理') {
+            steps {
+                // 列出当前目录内容
+                sh 'ls -alh'
+                sh 'mvn install -P docker_dev -Dmaven.test.skip=true'
+                // 进入live-console目录
+                sh 'cd live-console'
+                // 清理旧版本jar
+                sh 'mvn clean'
+
+            }
+        }
+        // saaa
+
+        stage('删除旧镜像') {
+            steps {
+                // 删除旧版本镜像
+                sh '''
+                    echo "删除旧版本镜像:t-console"
+                    docker rmi godsdo-test1.tencentcloudcr.com/test1/t-console:v10 || true
+                    docker rmi godsdo/gd-console:v10 || true
+                '''
+            }
+        }
+
+        stage('构建t-console服务') {
+            steps {
+                // 构建并推送新版本镜像
+                sh '''
+                    echo "t-console服务构建开始"
+                    mvn install -P docker_dev -Dmaven.test.skip=true dockerfile:build
+                    docker tag godsdo/gd-console:latest godsdo-test1.tencentcloudcr.com/test1/t-console:v10
+                    docker push godsdo-test1.tencentcloudcr.com/test1/t-console:v10
+                '''
+            }
+        }
+
+        stage('清理') {
+            steps {
+                // 清理构建结果
+                sh 'mvn clean'
+                // 结束消息
+                echo "t-console服务构建推送成功"
+                echo "=======构建脚本执行完毕====="
+            }
+        }
+    }
+}

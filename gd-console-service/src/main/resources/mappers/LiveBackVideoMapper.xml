@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.LiveBackVideoMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.LiveBackVideo">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="live_id" property="liveId"/>
+        <result column="live_name" property="liveName"/>
+        <result column="live_show_id" property="liveShowId"/>
+        <result column="image" property="image"/>
+        <result column="video_name" property="videoName"/>
+        <result column="task_id" property="taskId"/>
+        <result column="file_id" property="fileId"/>
+        <result column="comment" property="comment"/>
+        <result column="watch_password_enable" property="watchPasswordEnable"/>
+        <result column="watch_password" property="watchPassword"/>
+        <result column="video_size" property="videoSize"/>
+        <result column="video_duration" property="videoDuration"/>
+        <result column="record_start_time" property="recordStartTime"/>
+        <result column="record_end_time" property="recordEndTime"/>
+        <result column="status" property="status"/>
+        <result column="oss_url" property="ossUrl"/>
+        <result column="m3u8_url" property="m3u8Url"/>
+        <result column="quote_position" property="quotePosition"/>
+        <result column="group_id" property="groupId"/>
+        <result column="is_ban" property="isBan"/>
+        <result column="video_type" property="videoType"/>
+        <result column="media_id" property="mediaId"/>
+        <result column="task_type" property="taskType"/>
+        <result column="live_key" property="liveKey"/>
+        <result column="mobile_theme_type" property="mobileThemeType"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flg" property="deleteFlg"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, live_id,live_name, image,live_show_id, video_name,task_id,file_id, comment, watch_password_enable, watch_password, video_size, video_duration, record_start_time, record_end_time, status, oss_url, m3u8_url, quote_position, group_id, is_ban, video_type,media_id,task_type,live_key,mobile_theme_type, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+    <select id="getBackVideoList" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.mediaLibrary.GetAllBackVideoListDto">
+        SELECT
+        *
+        FROM
+        live_back_video
+        <where>
+            com_id=#{id}
+            and delete_flg=false
+            <if test="params.videoName != null and params.videoName != ''">
+                and video_name LIKE concat('%',#{params.videoName},'%')
+<!--                or id LIKE concat('%',#{params.videoName},'%')-->
+<!--                )-->
+            </if>
+            <if test="params.liveName != null and params.liveName != ''">
+                and live_name LIKE concat('%',#{params.liveName},'%')
+            </if>
+            <if test="params.groupId != null">
+                and group_id = #{params.groupId}
+            </if>
+        </where>
+        order by create_at desc
+    </select>
+    <select id="getBackLiveKeyList" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.mediaLibrary.GetAllBackVideoListDto">
+        SELECT
+        DISTINCT live_key
+        FROM
+        live_back_video
+        <where>
+            com_id=#{id}
+            AND live_key IS NOT NULL
+            and delete_flg=false
+            <if test="params.videoName != null and params.videoName != ''">
+                and (video_name LIKE concat('%',#{params.videoName},'%')
+                or id LIKE concat('%',#{params.videoName},'%')
+                )
+            </if>
+            <if test="params.liveId != null and params.liveId != ''">
+                and live_id LIKE concat('%',#{params.liveId},'%')
+            </if>
+            <if test="params.groupId != null">
+                and group_id = #{params.groupId}
+            </if>
+        </where>
+    </select>
+    <select id="getBackVideoListByFitment" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.mediaLibrary.GetAllBackVideoListDto">
+        SELECT
+        *
+        FROM
+        live_back_video
+        <where>
+            com_id=#{id}
+            and is_ban=false
+            and status = 2
+            <if test="params.videoName != null and params.videoName != ''">
+                and video_name LIKE concat('%',#{params.videoName},'%')
+            </if>
+            <if test="params.groupId != null and params.groupId != -1">
+                and group_id = #{params.groupId}
+            </if>
+            <if test="params.checkIds != null and params.checkIds.size != 0">
+                and id not in (
+                <foreach collection='params.checkIds' item='id' separator=','>
+                    #{id}
+                </foreach>
+                )
+            </if>
+            and delete_flg=false
+        </where>
+        order by create_at desc
+    </select>
+</mapper>

@@ -1,0 +1,56 @@
+<configuration>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+    <property name="CONSOLE_LOG_PATTERN" value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="GRAY_LOG_HOST" value="${graylogHost}"/>
+    <springProperty scope="context" name="graylogIp" source="graylog.ip" />
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="GELF" class="de.siegmar.logbackgelf.GelfUdpAppender">
+<!--        <graylogHost>124.223.22.186</graylogHost>-->
+<!--        <graylogHost>172.17.16.10</graylogHost>-->
+        <graylogHost>${graylogIp}</graylogHost>
+        <!--        <graylogHost>150.158.149.19</graylogHost>-->
+        <graylogPort>12201</graylogPort>
+        <maxChunkSize>508</maxChunkSize>
+        <!-- 是否使用压缩 -->
+        <!--    <useCompression>true</useCompression>-->
+        <encoder class="de.siegmar.logbackgelf.GelfEncoder">
+        <!-- 是否发送原生的日志信息 -->
+        <!--      <includeRawMessage>false</includeRawMessage>-->
+        <includeRawMessage>true</includeRawMessage>
+        <includeMarker>true</includeMarker>
+        <includeMdcData>true</includeMdcData>
+        <includeCallerData>false</includeCallerData>
+        <includeRootCauseData>false</includeRootCauseData>
+        <!-- 是否发送日志级别的名称，否则默认以数字代表日志级别 -->
+        <includeLevelName>true</includeLevelName>
+        <shortPatternLayout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%m%nopex</pattern>
+        </shortPatternLayout>
+        <fullPatternLayout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d - [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </fullPatternLayout>
+
+        <!-- 配置应用名称（服务名称），通过staticField标签可以自定义一些固定的日志字段 -->
+<!--        <staticField>app_name:austin</staticField>-->
+        <staticField>app_name:console</staticField>
+        </encoder>
+    </appender>
+
+    <!-- 控制台输出日志级别 -->
+    <root level="info">
+        <appender-ref ref="GELF" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+
+</configuration>
+

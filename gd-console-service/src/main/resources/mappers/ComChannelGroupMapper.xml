@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.channel.ComChannelGroupMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.channel.ComChannelGroup">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="name" property="name" />
+        <result column="parent_id" property="parentId" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flag" property="deleteFlag" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, name, parent_id, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+    <select id="selectListAndTotal" resultType="cn.godsdo.entity.channel.ComChannelGroup">
+        SELECT
+            a.id,
+            a.com_id,
+            a.name,
+            IFNULL(b.total,0) totalItem,
+            a.parent_id
+        FROM
+            com_channel_group a
+                LEFT JOIN ( SELECT count( 1 ) total, group_id FROM com_channel_dat WHERE com_id = #{comId} AND delete_flag = FALSE GROUP BY group_id ) b ON a.id = b.group_id
+        WHERE
+             a.com_id = #{comId} AND a.delete_flag = FALSE
+
+    </select>
+    <select id="selectListAndTotalByList" resultType="cn.godsdo.entity.channel.ComChannelGroup">
+        SELECT
+            a.id,
+            a.com_id,
+            a.name,
+            IFNULL(b.total,0) totalItem,
+            a.parent_id
+        FROM
+            com_channel_group a
+                LEFT JOIN ( SELECT count( 1 ) total, group_id FROM com_channel_dat
+        <where>
+         com_id = #{comId} AND delete_flag = FALSE
+            <if test="accountId != null and accountId != ''">
+                and account_id = #{accountId}
+            </if>
+        </where>
+        GROUP BY group_id
+        ) b ON a.id = b.group_id
+        WHERE
+             a.com_id = #{comId} AND a.delete_flag = FALSE and a.id in (
+                <foreach collection="list" item="item" separator=",">
+                    #{item}
+                </foreach>
+    )
+    </select>
+</mapper>

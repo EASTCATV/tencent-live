@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.gods.do</groupId>
+    <artifactId>godsdoLive</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>godsdoLive</name>
+    <description>godsdoLive</description>
+    <packaging>pom</packaging>
+    <modules>
+        <!-- 依赖管理 -->
+        <module>dependencies-parent</module>
+        <!-- 基础模块 -->
+        <module>gd-base</module>
+        <!-- id服务模块 -->
+        <module>gd-id-service</module>
+        <!-- 控制台 -->
+        <module>gd-console-api</module>
+        <module>gd-console-service</module>
+        <!--定时任务-->
+        <module>gd-job-service</module>
+        <!-- 主播端 -->
+        <module>gd-anchor-api</module>
+        <module>gd-anchor-service</module>
+        <!--微信模块-->
+        <module>gd-wechat</module>
+        <!--回调模块-->
+        <module>gd-call-back</module>
+        <!--kafka模块-->
+        <module>gd-kafka-service</module>
+        <!--kafka模块-->
+        <module>gd-data</module>
+        <!--kafka模块-->
+        <module>gd-update</module>
+        <!--xxL-job模块-->
+        <module>gd-xxL-job</module>
+    </modules>
+
+</project>

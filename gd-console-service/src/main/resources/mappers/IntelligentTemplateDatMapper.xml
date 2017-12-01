@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.intelligent.IntelligentTemplateDatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.intelligent.IntelligentTemplateDat">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="name" property="name"/>
+        <result column="video_id" property="videoId"/>
+        <result column="status" property="status"/>
+        <result column="image" property="image"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="task" property="task"/>
+        <result column="video_size" property="videoSize"/>
+        <result column="video_duration" property="videoDuration"/>
+        <result column="video_type" property="videoType"/>
+        <result column="template_code" property="templateCode"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="delete_flag" property="deleteFlag"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, name,status, video_id,image, video_url,task, video_duration, video_size, video_type, template_code, create_at, create_by, update_at, update_by, delete_flag
+    </sql>
+</mapper>

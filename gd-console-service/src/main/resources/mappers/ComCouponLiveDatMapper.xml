@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.coupon.ComCouponLiveDatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.coupon.ComCouponLiveDat">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="live_id" property="liveId"/>
+        <result column="put_status" property="putStatus"/>
+        <result column="recommend" property="recommend"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flag" property="deleteFlag"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, coupon_id, live_id,put_status,recommend, update_at, update_by, create_at, create_by, delete_flag
+    </sql>
+    <resultMap id="getLiveBindCouponMap" type="cn.godsdo.vo.coupon.GetAllCouponVo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="coupon_type" property="couponType"/>
+        <result column="recommend" property="recommend"/>
+        <result column="coupon_value" property="couponValue"/>
+        <result column="relation_commodity" property="relationCommodity"/>
+        <result column="allow_multiple" property="allowMultiple"/>
+        <result column="put_status" property="putStatus"/>
+        <collection column="id" property="sum" select="getUseSum"/>
+    </resultMap>
+    <select id="getUseSum" resultType="Integer">
+        SELECT IFNULL(sum(1), 0)
+        FROM pay_order
+        WHERE order_type = 2
+          AND status = 1
+          AND coupon_id = #{id}
+    </select>
+    <select id="getLiveNotBindCoupon" resultMap="getLiveBindCouponMap"
+            parameterType="cn.godsdo.dto.coupon.GetAllCouponDto">
+        SELECT ccd.id,ccd.coupon_type,ccd.`name`,ccd.coupon_value,ccd.relation_commodity,ccd.allow_multiple
+        FROM com_coupon_dat ccd
+        <where>
+            ccd.com_id = #{comId}
+            AND ccd.id NOT IN
+            (SELECT ccld.coupon_id FROM com_coupon_live_dat ccld WHERE ccld.live_id = #{dto.liveId} AND ccld.delete_flag
+            = FALSE)
+            <if test="dto.couponName != null and dto.couponName!= ''">
+                and ccd.name LIKE concat('%',#{dto.couponName},'%')
+            </if>
+            AND ccd.delete_flag = FALSE
+        </where>
+        ORDER BY ccd.create_at DESC
+    </select>
+    <select id="getLiveBindCoupon" resultMap="getLiveBindCouponMap"
+            parameterType="cn.godsdo.dto.coupon.GetAllCouponDto">
+        SELECT
+        ccd.id,ccd.coupon_type,ccd.`name`,ccld.recommend,ccd.coupon_value,ccld.put_status,ccd.relation_commodity,ccd.allow_multiple
+        FROM com_coupon_live_dat ccld LEFT JOIN com_coupon_dat ccd ON ccld.coupon_id = ccd.id
+        <where>
+            ccld.com_id = #{comId} AND ccld.live_id =#{dto.liveId}
+            <if test="dto.couponName != null and dto.couponName!= ''">
+                and ccd.name LIKE concat('%',#{dto.couponName},'%')
+            </if>
+            AND ccld.delete_flag = FALSE
+        </where>
+        ORDER BY ccld.create_at DESC
+    </select>
+</mapper>

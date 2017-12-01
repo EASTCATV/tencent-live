@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: gd-console-api
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+#  profiles:
+#    active: '@profiles.active@'
+  cloud:
+    nacos:
+      config:
+        server-addr: @nacos.config.server-addr@
+        file-extension: yaml
+        group: '@profiles.group@'
+        refresh-enabled: true
+        ext-config[0]:
+          data-id: gd-console-api-default.yaml
+          group: '@profiles.group@'
+          refresh: true
+#          type: yaml
+graylog:
+  ip: @graylogHost@

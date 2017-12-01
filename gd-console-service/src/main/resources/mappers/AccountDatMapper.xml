@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.AccountDatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.AccountDat">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="login" property="login"/>
+        <result column="profile" property="profile"/>
+        <result column="password" property="password"/>
+        <result column="employee_num" property="employeeNum"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="contact" property="contact"/>
+        <result column="project" property="project"/>
+        <result column="role_id" property="roleId"/>
+        <result column="unionid" property="unionid"/>
+        <result column="openid" property="openid"/>
+        <result column="wechat_nickname" property="wechatNickname"/>
+        <result column="user_condition" property="userCondition"/>
+        <result column="status" property="status"/>
+        <result column="data_permissions" property="dataPermissions"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flg" property="deleteFlg"/>
+        <result column="is_bind_wx" property="isBindWx"/>
+        <result column="invite_code" property="inviteCode"/>
+        <result column="check_flg" property="checkFlg"/>
+        <result column="teacher_introduce" property="teacherIntroduce"/>
+        <result column="email" property="email"/>
+        <result column="auth_corpid" property="authCorpid"/>
+        <result column="wx_user_id" property="wxUserId"/>
+        <result column="wx_user_name" property="wxUserName"/>
+        <result column="bind_type" property="bindType"/>
+        <result column="bind_corpid" property="bindCorpid"/>
+        <result column="bind_userid" property="bindUserid"/>
+        <result column="bind_name" property="bindName"/>
+        <result column="bind_qrcode" property="bindQrcode"/>
+        <result column="bind_configid" property="bindConfigid"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , com_id, login, password,employee_num,profile,  name, sex, contact, project, role_id, unionid, openid, wechat_nickname, user_condition, status, data_permissions, update_at, update_by, create_at, create_by, delete_flg, is_bind_wx, invite_code, check_flg, teacher_introduce, email, auth_corpid, wx_user_id, wx_user_name, bind_type, bind_corpid, bind_userid, bind_name, bind_qrcode, bind_configid
+    </sql>
+
+    <select id="getLecturerList" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.user.GetLecturerDto">
+        SELECT
+        ad.id,
+        ad.name
+        FROM
+        account_dat ad LEFT JOIN sys_role sr ON sr.com_id = ad.com_id
+        <where>
+            ad.com_id=#{comId}
+            and sr.role_type=2
+            and ad.role_id=sr.id
+            and sr.delete_flg = false
+            and ad.delete_flg = false
+        </where>
+        GROUP BY ad.id
+        order by ad.create_at desc
+    </select>
+
+    <resultMap id="GetAccountListMap" type="cn.godsdo.vo.GetAccountListVo">
+        <id column="id" property="id"/>
+        <result column="login" property="login"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="employee_num" property="employeeNum"/>
+        <result column="profile" property="profile"/>
+        <result column="data_permissions" property="dataPermissions"/>
+        <result column="role_id" property="roleId"/>
+        <result column="role_name" property="roleName"/>
+        <result column="project" property="project"/>
+    </resultMap>
+    <select id="getAccountList" resultMap="GetAccountListMap"
+            parameterType="cn.godsdo.dto.user.GetAccountListDto">
+        SELECT
+        ad.id,
+        ad.name,
+        ad.password,
+        ad.employee_num,
+        ad.login,
+        ad.profile,
+        ad.role_id,
+        ad.data_permissions,
+        sr.role_name,
+        ad.project
+        FROM
+        account_dat ad
+        LEFT JOIN sys_role sr ON sr.com_id = ad.com_id AND sr.id = ad.role_id
+        <where>
+            ad.com_id=#{comId}
+            and ad.delete_flg = false
+            <if test="params.idOrName != null and params.idOrName != ''">
+                and (ad.name LIKE concat('%',#{params.idOrName},'%')
+                or ad.login LIKE concat('%',#{params.idOrName},'%'))
+            </if>
+            <if test="params.roleId!=null and params.roleId!=0">
+                and ad.role_id = #{params.roleId}
+            </if>
+
+        </where>
+        GROUP BY ad.id
+        order by ad.create_at desc
+    </select>
+<!--    判断是不是讲师-->
+    <select id="isLecturer" resultType="int"
+            parameterType="java.lang.Long">
+    SELECT
+        count(1)
+        FROM
+        account_dat ad LEFT JOIN sys_role sr ON sr.id = ad.role_id
+        <where>
+            ad.com_id=#{comId}
+            and sr.role_type=2
+            and sr.delete_flg = false
+            and ad.delete_flg = false
+            and ad.id=#{accountId}
+        </where>
+    </select>
+
+
+</mapper>

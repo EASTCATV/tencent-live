@@ -1,0 +1,4 @@
+pass:
+  url: /AddLog,/comVideoDat/chunk
+  request_url: /comVideoDat/chunk,/intelligentTemplateDat/importMessagesData
+  response_url: /comVideoDat/chunk,/statistics/downLiveUserWatchList,/statistics/downLiveUserWatchDetail,/TencentIm/downMessages,/intelligentTemplateDat/downMessagesByTemplate

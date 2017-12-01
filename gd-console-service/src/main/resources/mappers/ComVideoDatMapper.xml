@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.com.ComVideoDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.com.ComVideoDat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="group_id" property="groupId" />
+        <result column="video_name" property="videoName" />
+        <result column="file_id" property="fileId" />
+        <result column="watch_password" property="watchPassword" />
+        <result column="watch_password_enable" property="watchPasswordEnable" />
+        <result column="comment" property="comment" />
+        <result column="volume" property="volume" />
+        <result column="original_file" property="originalFile" />
+        <result column="time_length" property="timeLength" />
+        <result column="image" property="image" />
+        <result column="oss_resource" property="ossResource" />
+        <result column="oss_m3u8" property="ossM3u8" />
+        <result column="identifier" property="identifier" />
+        <result column="play_count" property="playCount" />
+        <result column="status" property="status" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flg" property="deleteFlg" />
+        <result column="play_status" property="playStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, group_id, video_name,file_id, watch_password, watch_password_enable, comment, volume, original_file, time_length, image, oss_resource, oss_m3u8, identifier, play_count, status, update_at, update_by, create_at, create_by, delete_flg, play_status
+    </sql>
+
+    <select id="getComVideoList" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.mediaLibrary.GetAllBackVideoListDto">
+        SELECT * FROM com_video_dat
+        <where>
+            com_id=#{id}
+            and delete_flg=false
+            <if test="params.videoName != null and params.videoName != ''">
+                and (video_name LIKE concat('%',#{params.videoName},'%')
+                or id LIKE concat('%',#{params.videoName},'%')
+                )
+            </if>
+            <if test="params.groupId != null">
+                and group_id = #{params.groupId}
+            </if>
+        </where>
+        order by create_at desc
+    </select>
+    <select id="getComVideoListByFitment" resultMap="BaseResultMap"
+            parameterType="cn.godsdo.dto.mediaLibrary.GetAllBackVideoListDto">
+        SELECT
+        *
+        FROM
+        com_video_dat
+        <where>
+            com_id=#{id}
+            and status = 'FINISH'
+            <if test="params.videoName != null and params.videoName != ''">
+                and video_name LIKE concat('%',#{params.videoName},'%')
+            </if>
+            <if test="params.groupId != null and params.groupId != -1">
+                and group_id = #{params.groupId}
+            </if>
+            <if test="params.checkIds != null and params.checkIds.size != 0">
+                and id not in (
+                <foreach collection='params.checkIds' item='id' separator=','>
+                    #{id}
+                </foreach>
+                )
+            </if>
+            and delete_flg=false
+        </where>
+        order by create_at desc
+    </select>
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.AlipayMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.pay.Alipay">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="pay_type" property="payType" />
+        <result column="tenantid" property="tenantid" />
+        <result column="server_url" property="serverUrl" />
+        <result column="paystatus" property="paystatus" />
+        <result column="amount" property="amount" />
+        <result column="weight" property="weight" />
+        <result column="status" property="status" />
+        <result column="app_id" property="appId" />
+        <result column="private_key" property="privateKey" />
+        <result column="alipay_publickey" property="alipayPublickey" />
+        <result column="app_cert_content" property="appCertContent" />
+        <result column="alipaypubliccertcontent" property="alipaypubliccertcontent" />
+        <result column="rootcertcontent" property="rootcertcontent" />
+        <result column="name" property="name" />
+        <result column="opt_pay" property="optPay" />
+        <result column="native_type" property="nativeType" />
+        <result column="CREATETIME" property="createtime" />
+        <result column="UPDATETIME" property="updatetime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, pay_type, tenantid, server_url, paystatus, amount, weight, status, app_id, private_key, alipay_publickey, app_cert_content, alipaypubliccertcontent, rootcertcontent, name, opt_pay, native_type, CREATETIME, UPDATETIME
+    </sql>
+
+</mapper>

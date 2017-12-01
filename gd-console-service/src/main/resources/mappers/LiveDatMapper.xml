@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.live.LiveDatMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.live.LiveDat">
+        <id column="id" property="id"/>
+        <result column="com_id" property="comId"/>
+        <result column="show_id" property="showId"/>
+        <result column="trtc_id" property="trtcId"/>
+        <result column="name" property="name"/>
+        <result column="live_type" property="liveType"/>
+        <result column="cover_image" property="coverImage"/>
+        <result column="start_play_time" property="startPlayTime"/>
+        <result column="end_play_time" property="endPlayTime"/>
+        <result column="lecturer_id" property="lecturerId"/>
+        <result column="project" property="project"/>
+        <result column="content" property="content"/>
+        <result column="user_password" property="userPassword"/>
+        <result column="live_status" property="liveStatus"/>
+        <result column="group_id" property="groupId"/>
+        <result column="im_group_id" property="imGroupId"/>
+        <result column="short_url" property="shortUrl"/>
+        <result column="update_at" property="updateAt"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="create_at" property="createAt"/>
+        <result column="create_by" property="createBy"/>
+        <result column="delete_flg" property="deleteFlg"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        ,show_id, com_id,trtc_id, name, live_type, cover_image, start_play_time, end_play_time, lecturer_id, content,project, user_password, live_status, group_id,im_group_id, short_url, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+    <resultMap id="getLiveListVo" type="cn.godsdo.vo.live.GetLiveListVo">
+        <id column="id" property="liveId"/>
+        <id column="show_id" property="showId"/>
+        <id column="name" property="name"/>
+        <id column="cover_image" property="coverImage"/>
+        <id column="mobile_theme_type" property="liveTheme"/>
+        <id column="start_play_time" property="startPlayTime"/>
+        <id column="lecturerId" property="lecturerId"/>
+        <id column="lecturerName" property="lecturerName"/>
+        <id column="live_status" property="liveStatus"/>
+        <id column="create_at" property="createAt"/>
+        <id column="create_by" property="createBy"/>
+        <collection column="{id = create_by}" property="createByName" select="getCreateByName"/>
+    </resultMap>
+
+    <select id="getCreateByName" resultType="string">
+        SELECT name
+        FROM account_dat
+        where id = #{id}
+    </select>
+    <select id="getLiveList" resultMap="getLiveListVo"
+            parameterType="cn.godsdo.dto.live.GetLiveListDto">
+        SELECT ld.id,ld.show_id,ld.name,ld.live_status,ld.cover_image,lrc.mobile_theme_type,
+              ld.create_by,ld.create_at,ld.start_play_time,
+        ad.name lecturerName
+        FROM live_dat ld
+        LEFT JOIN live_config lrc ON lrc.live_id = ld.id
+        LEFT JOIN account_dat ad ON ld.lecturer_id = ad.id
+        <where>
+            ld.com_id = #{comId} and ld.delete_flg=false
+            <if test="params.roomName != null and params.roomName != ''">
+                and ld.name LIKE concat('%',#{params.roomName},'%')
+            </if>
+            <if test="params.liveStatus != null and params.liveStatus != 2">
+                and ld.live_status = #{params.liveStatus}
+            </if>
+            <if test="params.startTime != null and params.startTime != ''">
+                and ld.start_play_time>= #{params.startTime} and ld.start_play_time &lt;= #{params.endTime}
+            </if>
+            <if test="params.liveTheme != null and params.liveTheme != 0">
+                and lrc.mobile_theme_type = #{params.liveTheme}
+            </if>
+            <if test="params.ids!=null and params.ids.size>0">
+                and ld.project in (
+                <foreach collection="params.ids" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="params.trainingCamp != null">
+                and ld.live_type = #{params.trainingCamp}
+            </if>
+            <if test="params.liveIds!=null and params.liveIds.size>0">
+                and ld.id in (
+                <foreach collection="params.liveIds" item="item" separator=",">
+                    #{item}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by ld.create_at desc
+    </select>
+
+    <resultMap id="getLivingRoomVo" type="cn.godsdo.vo.live.GetLivingRoomVo">
+        <id column="id" property="liveId"/>
+        <id column="name" property="roomName"/>
+        <id column="trtc_id" property="trtcId"/>
+        <id column="profile" property="profile"/>
+        <id column="show_id" property="showId"/>
+        <id column="cover_image" property="coverImage"/>
+        <id column="lecturerId" property="lecturerId"/>
+        <id column="lecturerName" property="lecturerName"/>
+
+        <id column="start_play_time" property="plugStart"/>
+        <id column="live_type" property="liveType"/>
+        <id column="live_status" property="liveStatus"/>
+    </resultMap>
+
+    <select id="getLivingRoom" resultMap="getLivingRoomVo">
+        SELECT ld.id,ld.show_id, ld.name, ld.live_type, ld.cover_image, ld.create_at, ld.start_play_time, ad.name lecturerName, ad.profile ,ld.live_status
+        FROM live_dat ld
+         LEFT JOIN account_dat ad ON ld.lecturer_id = ad.id
+        WHERE ld.com_id = #{comId}
+          and ld.delete_flg = false
+          and ld.live_status = 1
+    </select>
+    <select id="getLivingRoomByLecturerId" resultMap="getLivingRoomVo">
+        SELECT ld.id,ld.show_id,ld.trtc_id,ld.lecturer_id, ld.name, ld.live_type, ld.cover_image, ld.create_at, ld.start_play_time, ad.name lecturerName, ad.profile , live_status
+        FROM live_dat ld
+        LEFT JOIN account_dat ad ON ld.lecturer_id = ad.id
+        WHERE ld.com_id = #{comId}
+          and ld.delete_flg = false
+          and ld.lecturer_id = #{lecturerId}
+       order by ld.create_at desc
+    </select>
+</mapper>

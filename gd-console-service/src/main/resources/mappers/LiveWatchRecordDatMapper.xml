@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.godsdo.mapper.LiveWatchRecordDatMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.godsdo.entity.LiveWatchRecordDat">
+        <id column="id" property="id" />
+        <result column="com_id" property="comId" />
+        <result column="live_id" property="liveId" />
+        <result column="live_record_id" property="liveRecordId" />
+        <result column="user_id" property="userId" />
+        <result column="enter_time" property="enterTime" />
+        <result column="latest_upload_time" property="latestUploadTime" />
+        <result column="out_time" property="outTime" />
+        <result column="city" property="city" />
+        <result column="ip" property="ip" />
+        <result column="system_os" property="systemOs" />
+        <result column="operators" property="operators" />
+        <result column="browser" property="browser" />
+        <result column="update_at" property="updateAt" />
+        <result column="update_by" property="updateBy" />
+        <result column="create_at" property="createAt" />
+        <result column="create_by" property="createBy" />
+        <result column="delete_flg" property="deleteFlg" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, com_id, live_id, live_record_id, user_id, enter_time, latest_upload_time, out_time, city, ip, system_os, operators, browser, update_at, update_by, create_at, create_by, delete_flg
+    </sql>
+
+    <insert id="synchronizationData">
+        Insert Into live_watch_record_dat (id, com_id, live_id, live_record_id, user_id, enter_time, latest_upload_time, out_time, create_at, create_by)
+        VALUES
+        <foreach collection="liveWatchRecordDats" item="liveWatchRecordDat" index="index" separator=",">
+            (#{liveWatchRecordDat.id}, #{liveWatchRecordDat.comId}, #{liveWatchRecordDat.liveId}, #{liveWatchRecordDat.liveRecordId}, #{liveWatchRecordDat.userId}, #{liveWatchRecordDat.enterTime}, #{liveWatchRecordDat.latestUploadTime}, #{liveWatchRecordDat.outTime}, #{liveWatchRecordDat.createAt}, #{liveWatchRecordDat.createBy})
+        </foreach>
+        ON DUPLICATE KEY UPDATE latest_upload_time = VALUES(latest_upload_time),out_time = VALUES(out_time);
+    </insert>
+
+    <select id="getWatchRecordList" resultType="cn.godsdo.entity.LiveWatchRecordDat">
+        SELECT id,com_id,live_id, live_record_id, user_id, enter_time, out_time,city,ip,system_os,operators,browser,
+               create_at,create_by,update_at,update_by
+        FROM live_watch_record_dat
+        WHERE live_record_id = #{liveRecordId}
+        group by user_id
+    </select>
+
+    <select id="getUserWatchRecordCount" resultType="java.lang.Integer">
+        SELECT count(id)
+        FROM live_watch_record_dat
+        WHERE live_record_id = #{liveRecordId}
+          and user_id = #{userId}
+          and live_id = #{liveId}
+    </select>
+
+</mapper>
